@@ -1,0 +1,28 @@
+name: Build IPA
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar XcodeGen
+        run: brew install xcodegen
+      - name: Gerar projeto
+        run: xcodegen
+      - name: Compilar (sem assinatura)
+        run: |
+          xcodebuild -project LicencasApp.xcodeproj -scheme LicencasApp -configuration Release \
+            -sdk iphoneos -destination 'generic/platform=iOS' \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build
+      - name: Empacotar .ipa
+        run: |
+          mkdir -p Payload
+          cp -R build/Build/Products/Release-iphoneos/LicencasApp.app Payload/
+          zip -qr Licencas.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Licencas-ipa
+          path: Licencas.ipa
