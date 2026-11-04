@@ -2,12 +2,14 @@ import SwiftUI
 
 struct LicencasView: View {
     @EnvironmentObject var app: AppState
-    @State private var categoria = ""        // "" = todas
+    @State private var categoria: String        // "" = todas
     @State private var busca = ""
     @State private var fSit = ""             // "", atencao, vermelho, ambar, verde
     @State private var fReg = ""
     @State private var fLR = ""
     @State private var nova = false
+
+    init(categoria: String = "") { _categoria = State(initialValue: categoria) }
 
     private var regs: [String] { Array(Set(app.dados.empreendimentos.compactMap { $0.regional }.filter { !$0.isEmpty })).sorted() }
     private var lrs: [String] { Array(Set(app.dados.empreendimentos.compactMap { $0.lr }.filter { !$0.isEmpty })).sorted() }

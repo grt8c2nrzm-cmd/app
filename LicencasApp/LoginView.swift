@@ -47,6 +47,8 @@ struct LoginView: View {
                         .font(.footnote).foregroundStyle(.secondary).padding(.top, 6)
                 }
                 .padding(.horizontal, 24)
+                .frame(maxWidth: 520)
+                .frame(maxWidth: .infinity)
             }
         }
         .onAppear { servidor = app.servidor }
