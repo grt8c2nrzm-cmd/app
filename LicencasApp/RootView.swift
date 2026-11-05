@@ -2,6 +2,7 @@ import SwiftUI
 
 enum Destino: Hashable {
     case painel
+    case farol
     case categoria(String)     // "" = todas
     case relatorio
     case mais
@@ -15,6 +16,7 @@ struct RootView: View {
         } else {
             TabView {
                 PainelView().tabItem { Label("Painel", systemImage: "square.grid.2x2") }
+                FarolView().tabItem { Label("Farol", systemImage: "circle.grid.3x3.fill") }
                 LicencasView().tabItem { Label("Licenças", systemImage: "doc.text") }
                 RelatorioView().tabItem { Label("Relatório", systemImage: "chart.bar.doc.horizontal") }
                 MaisView().tabItem { Label("Mais", systemImage: "ellipsis.circle") }
@@ -32,6 +34,7 @@ struct IPadRoot: View {
         NavigationSplitView {
             List(selection: $destino) {
                 Label("Painel", systemImage: "square.grid.2x2").tag(Destino.painel)
+                Label("Farol das unidades", systemImage: "circle.grid.3x3.fill").tag(Destino.farol)
                 Section("Licenças") {
                     ForEach(Tipos.todos, id: \.self) { t in
                         Label(Tipos.nome(t), systemImage: Tipos.icone(t)).tag(Destino.categoria(t))
@@ -48,6 +51,7 @@ struct IPadRoot: View {
         } detail: {
             switch destino ?? .painel {
             case .painel: PainelView()
+            case .farol: FarolView()
             case .categoria(let c): LicencasView(categoria: c).id(c)
             case .relatorio: RelatorioView()
             case .mais: MaisView()

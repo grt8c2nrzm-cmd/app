@@ -20,7 +20,7 @@ struct LicencasView: View {
             guard categoria.isEmpty || l.tipo == categoria, let e = app.emp(l.empId) else { return nil }
             if !fReg.isEmpty && e.regional != fReg { return nil }
             if !fLR.isEmpty && e.lr != fLR { return nil }
-            let s = situacao(l, app.dados.cfg)
+            let s = app.sit(l)
             switch fSit {
             case "atencao": if !s.atencao { return nil }
             case "vermelho": if s.cor != .vermelho { return nil }
@@ -61,7 +61,7 @@ struct LicencasView: View {
                             HStack {
                                 Chip(sit: s)
                                 Spacer()
-                                Text("\(l.numero ?? "s/ nº") · \(Datas.br(l.validade))").font(.caption).foregroundStyle(.secondary)
+                                Text("\(l.numero ?? "s/ nº") · \(l.validadeTxt)").font(.caption).foregroundStyle(.secondary)
                             }
                             Text([e.regional, e.ls, e.lr].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " · "))
                                 .font(.caption2).foregroundStyle(.tertiary)

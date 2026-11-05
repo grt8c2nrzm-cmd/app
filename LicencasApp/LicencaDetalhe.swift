@@ -11,7 +11,7 @@ struct LicencaDetalhe: View {
     @State private var movTexto = ""
     @State private var confirmaExcluir = false
 
-    private var sit: Sit { situacao(l, app.dados.cfg) }
+    private var sit: Sit { app.sit(l) }
     private var emp: Emp? { app.emp(l.empId) }
     private var proto: Binding<Protocolo> { Binding(get: { l.protocolo ?? Protocolo() }, set: { l.protocolo = $0 }) }
     private var conds: Binding<[Cond]> { Binding(get: { l.condicionantes ?? [] }, set: { l.condicionantes = $0 }) }
@@ -22,7 +22,7 @@ struct LicencaDetalhe: View {
 
     var body: some View {
         Form {
-            if !novo || !l.empId.isEmpty, l.validade?.isEmpty == false {
+            if !novo || !l.empId.isEmpty, (l.validade?.isEmpty == false || l.indeterminada == true) {
                 Section {
                     HStack { Chip(sit: sit); Spacer(); Text(Datas.diasTxt(sit.dias)).foregroundStyle(.secondary) }
                     if let n = sit.nota { Text(n).font(.footnote).foregroundStyle(.secondary) }
@@ -45,7 +45,8 @@ struct LicencaDetalhe: View {
                 TextField("Órgão", text: txt(\.orgao))
                 TextField("Processo", text: txt(\.processo))
                 DataCampo(titulo: "Emissão", valor: txt(\.emissao))
-                DataCampo(titulo: "Validade", valor: txt(\.validade))
+                Toggle("Vencimento indeterminado", isOn: Binding(get: { l.indeterminada ?? false }, set: { l.indeterminada = $0; if $0 { l.validade = "" } }))
+                if l.indeterminada != true { DataCampo(titulo: "Validade", valor: txt(\.validade)) }
             }
             if l.tipo == "LO" {
                 Section(header: Text("Protocolo de renovação"), footer: Text("Protocolar até \(app.dados.cfg.protocoloLO) dias antes do vencimento mantém a LO válida.")) {

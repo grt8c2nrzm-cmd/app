@@ -25,7 +25,7 @@ struct MaisView: View {
                 Section("Empreendimentos (\(emps.count))") {
                     ForEach(emps) { e in
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("\(e.sigla) — \(e.nome)").font(.subheadline.weight(.semibold))
+                            Text("\(e.sigla) — \(e.nome)\(e.semPoco == true ? " · sem poço" : "")").font(.subheadline.weight(.semibold))
                             Text([e.regional, e.ls, e.lr].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " · "))
                                 .font(.caption).foregroundStyle(.secondary)
                         }

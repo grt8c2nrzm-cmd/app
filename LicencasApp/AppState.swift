@@ -14,6 +14,7 @@ final class AppState: ObservableObject {
     var precisaServidor: Bool { !Config.configurado }
 
     func emp(_ id: String) -> Emp? { dados.empreendimentos.first { $0.id == id } }
+    func sit(_ l: Licenca) -> Sit { situacao(l, dados.cfg, semPoco: emp(l.empId)?.semPoco ?? false) }
 
     func restaurarSessao() async {
         defer { restaurando = false }

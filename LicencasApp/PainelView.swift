@@ -9,7 +9,7 @@ struct PainelView: View {
         app.dados.licencas.compactMap { l in
             guard let e = app.emp(l.empId) else { return nil }
             if let r = rtId, !(e.rts ?? []).contains(r) { return nil }
-            return (l, e, situacao(l, app.dados.cfg))
+            return (l, e, app.sit(l))
         }
     }
 

@@ -55,7 +55,13 @@ struct Sit {
     var atencao: Bool { cor == .vermelho || cor == .ambar }
 }
 
-func situacao(_ l: Licenca, _ c: Cfg) -> Sit {
+func situacao(_ l: Licenca, _ c: Cfg, semPoco: Bool = false) -> Sit {
+    if l.tipo == "OUTORGA" && semPoco {
+        return Sit(cor: .cinza, texto: "Sem poço · não se aplica", ordem: 6, dias: nil, nota: nil)
+    }
+    if l.indeterminada == true {
+        return Sit(cor: .verde, texto: "Vencimento indeterminado", ordem: 4, dias: nil, nota: nil)
+    }
     guard let val = l.validade, !val.isEmpty, let d = Datas.dias(ate: val) else {
         return Sit(cor: .cinza, texto: "Sem validade", ordem: 5, dias: nil, nota: nil)
     }

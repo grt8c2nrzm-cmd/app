@@ -21,6 +21,7 @@ struct Emp: Codable, Identifiable, Hashable {
     var ls: String?
     var lr: String?
     var rts: [String]?
+    var semPoco: Bool?
 }
 struct Protocolo: Codable, Hashable {
     var feito = false
@@ -59,11 +60,14 @@ struct Licenca: Codable, Identifiable, Hashable {
     var processo: String?
     var emissao: String?
     var validade: String?
+    var indeterminada: Bool?
     var obs: String?
     var rev: Int = 0
     var protocolo: Protocolo?
     var condicionantes: [Cond]?
     var movimentacoes: [Mov]?
+
+    var validadeTxt: String { indeterminada == true ? "Indeterminada" : Datas.br(validade) }
 
     static func vazia(_ tipo: String) -> Licenca {
         Licenca(tipo: tipo, protocolo: tipo == "LO" ? Protocolo() : nil,
